@@ -1,0 +1,12 @@
+import nibabel as nib
+
+filepath= 'hippocampus_001.nii.gz'
+img=nib.load(filepath)
+data=img.get_fdata()
+
+slice=data[1]
+
+import matplotlib.pyplot as plt
+
+plt.imshow(slice)
+plt.show
