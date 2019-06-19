@@ -1,0 +1,33 @@
+import os
+
+img_folder='./brain mri/Task04_Hippocampus/imagesTr/' #image folder path
+label_folder='./brain mri/Task04_Hippocampus/labelsTr/'  #label folder path
+
+filename='hippocampus_001.nii.gz' #file we will work on
+
+scanPath=os.path.join(img_folder,filename) #joining image folder and file name
+labelPath=os.path.join(label_folder,filename) #joining label folder and file name
+
+sliceno=20 #slice we will be work on
+
+import nibabel as nib
+
+scanimg=nib.load(scanPath) #loading scanpath into scanimg
+data1=scanimg.get_fdata() #geeting the data from scanimg to data1
+img=data1[sliceno,:,:] #slice into x asis
+
+scanlbl=nib.load(labelPath)  #loading labelpath into scanlbl
+data2=scanlbl.get_fdata() #getting data of label into data2
+lbl=data2[sliceno,:,:] #slice of x axis
+
+import h5py
+
+h5file = h5py.File("task.h5","w") #creating a h5 file named task and writing
+h5file.create_dataset("image", img.shape)# creating data set named image that will hold image shape
+h5file["image"][...] = img #stoeing the image
+
+#h5file = h5py.File("task.h5","w") #already created a file no need for new one
+h5file.create_dataset("label", lbl.shape)
+h5file["label"][...] = lbl
+
+h5file.close() #closing h5file
